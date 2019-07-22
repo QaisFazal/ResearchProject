@@ -1,0 +1,76 @@
+{% extends 'bootstrap/base.html' %}
+{% block content %}
+
+
+        <div class="container">
+            <div class="jumbotron text-center">
+
+            <h2>Rating Using Sentiment Analysis Application</h2>
+        </div>    
+        
+        
+        <form action="{{url_for('analyze')}}" method="POST" id="analyseForm">
+            <textarea name="rawtext" rows="3" cols="3" class="form-control" required="true">
+
+            </textarea>
+            <input type="submit" value="Analyze" class="btn btn-primary">
+            <input type="reset" value="Clear" class="btn btn-outline-primary">
+            
+            <a href="{{url_for('index')}}" type="button" class="btn btn-danger">Reset</a>
+
+        </form>
+        <div class="card">
+            <div>
+                <p>{{ received_text }}</p>
+            </div>
+        </hr>
+        <div class="card-body">
+            {% for i in summary %}
+            <li>{{i}}</li>
+            {% endfor %}
+        </div>
+        <table class="table table-striped table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">Sentiment</th>
+                    <th scope="col">Polarity</th>
+                    <th scope="col">Subjectivity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">Score:</th>
+                    <td id="polarity">{{blob_sentiment}}</td>
+                    <td id>{{blob_subjectivity}}</td>
+                </tr>
+            </tbody>
+
+        </table>
+        <p>Number of words: {{number_of_tokens}}</p>
+        <br/>
+        <br/>
+        <p id="rateval"></p>
+        <button id="go" onclick="rate()">Rate!</button>
+        <script>
+            function rate() {
+                var x = document.getElementById("polarity").innerHTML;
+                var val=parseFloat(x);
+                if (val>=-1.0&&val<-0.6)
+                    document.getElementById("rateval").innerHTML="1.0/5.0";
+                else if (val>=-0.6&&val<-0.2) 
+                    document.getElementById("rateval").innerHTML="2.0/5.0";
+                else if (val>=-0.2&&val<0.2) 
+                    document.getElementById("rateval").innerHTML="3.0/5.0";
+                else if (val>=0.2&&val<0.6) 
+                    document.getElementById("rateval").innerHTML="4.0/5.0";
+                else if (val>=0.6&&val<1.0) 
+                    document.getElementById("rateval").innerHTML="5.0/5.0";        
+                else
+                    document.getElementById("rateval").innerHTML="ERROR!";
+            }
+        </script>
+
+        </div>
+    </div>
+    
+{% endblock %}
